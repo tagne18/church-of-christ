@@ -7,6 +7,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -224,7 +226,154 @@
             box-shadow: var(--shadow);
         }
 
-        /* Search Section */
+        .countdown-section {
+            padding: 2rem 0;
+            background: var(--white);
+            margin-bottom: 2rem;
+        }
+
+        .countdown-container {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .countdown-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        .countdown-display {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .countdown-item {
+            background: var(--gray-light);
+            border-radius: 10px;
+            padding: 1rem;
+            min-width: 80px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .countdown-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .countdown-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            display: block;
+        }
+
+        .countdown-label {
+            font-size: 0.8rem;
+            color: var(--gray-dark);
+            text-transform: uppercase;
+        }
+
+        .next-group-info {
+            font-size: 1.1rem;
+            color: var(--gray-dark);
+            margin-top: 1rem;
+        }
+
+        .notification-section {
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        .notification-btn {
+            background: var(--accent-gold);
+            color: var(--primary-blue);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0.5rem;
+        }
+
+        .notification-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .notification-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .share-section {
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        .share-btn {
+            background: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0.5rem;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .export-section {
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        .export-btn {
+            background: #4caf50;
+            color: var(--white);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0.5rem;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow-hover);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1001;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
         .search-section {
             padding: 3rem 0;
             background: var(--white);
@@ -466,6 +615,67 @@
         .mb-1 { margin-bottom: 1rem; }
         .mb-2 { margin-bottom: 2rem; }
         .mt-2 { margin-top: 2rem; }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            
+            .theme-toggle,
+            .interactive-section,
+            .countdown-section,
+            .search-section {
+                display: none !important;
+            }
+            
+            .hero,
+            .planning-section,
+            .groups-section {
+                page-break-inside: avoid;
+            }
+            
+            .week-card,
+            .group-card {
+                break-inside: avoid;
+                border: 1px solid #ccc !important;
+                box-shadow: none !important;
+            }
+            
+            h1, h2, h3 {
+                color: black !important;
+            }
+            
+            a {
+                text-decoration: none !important;
+                color: black !important;
+            }
+        }
+
+        /* Responsive improvements */
+        @media (max-width: 768px) {
+            .countdown-display {
+                gap: 0.5rem;
+            }
+            
+            .countdown-item {
+                min-width: 60px;
+                padding: 0.5rem;
+            }
+            
+            .countdown-number {
+                font-size: 1.5rem;
+            }
+            
+            .notification-btn,
+            .share-btn,
+            .export-btn {
+                display: block;
+                width: 100%;
+                margin: 0.5rem 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -496,7 +706,54 @@
             </div>
         </section>
 
-        <!-- Search Section -->
+        <!-- Countdown Section -->
+        <section class="countdown-section">
+            <div class="container">
+                <div class="countdown-container">
+                    <h2 class="countdown-title">⏰ Temps restant avant le prochain nettoyage</h2>
+                    <div class="countdown-display" id="countdownDisplay">
+                        <!-- Content will be generated by JavaScript -->
+                    </div>
+                    <div class="next-group-info" id="nextGroupInfo">
+                        <!-- Content will be generated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Features Section -->
+        <section class="interactive-section">
+            <div class="container">
+                <div class="notification-section">
+                    <button class="notification-btn" id="notificationBtn">
+                        🔔 Activer les rappels
+                    </button>
+                    <button class="notification-btn" id="testNotificationBtn" style="display: none;">
+                        📢 Tester la notification
+                    </button>
+                </div>
+                
+                <div class="share-section">
+                    <button class="share-btn" id="shareBtn">
+                        📤 Partager le planning
+                    </button>
+                    <button class="share-btn" id="copyLinkBtn">
+                        📋 Copier le lien
+                    </button>
+                </div>
+                
+                <div class="export-section">
+                    <button class="export-btn" id="exportPdfBtn">
+                        📄 Exporter en PDF
+                    </button>
+                    <button class="export-btn" id="printBtn">
+                        🖨️ Imprimer
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <div class="toast" id="toast"></div>
         <section class="search-section">
             <div class="container">
                 <div class="search-container">
@@ -647,7 +904,325 @@
             };
         }
 
-        // Fonctions de génération HTML
+        // Fonctions pour les nouvelles fonctionnalités
+        let countdownInterval;
+        let notificationPermission = false;
+
+        function updateCountdown() {
+            const now = new Date();
+            const nextCleaningDate = getNextCleaningDate();
+            const timeDiff = nextCleaningDate - now;
+            
+            // Debug : afficher les dates dans la console
+            console.log('=== UPDATE COUNTDOWN ===');
+            console.log('Now:', now);
+            console.log('Next cleaning date:', nextCleaningDate);
+            console.log('Time diff (ms):', timeDiff);
+            console.log('Time diff (hours):', timeDiff / (1000 * 60 * 60));
+            
+            // Si le temps est écoulé, passer au prochain nettoyage
+            if (timeDiff <= 0) {
+                console.log('Time elapsed, moving to next week');
+                const followingMonday = new Date(nextCleaningDate);
+                followingMonday.setDate(followingMonday.getDate() + 7);
+                updateCountdownDisplay(followingMonday);
+                return;
+            }
+            
+            updateCountdownDisplay(nextCleaningDate);
+        }
+
+        function getNextCleaningDate() {
+            const today = new Date();
+            const currentDay = today.getDay(); // 0 = Dimanche, 1 = Lundi, ..., 6 = Samedi
+            const currentHour = today.getHours();
+            
+            console.log('=== GET NEXT CLEANING DATE ===');
+            console.log('Today:', today);
+            console.log('Day of week:', currentDay);
+            console.log('Hour:', currentHour);
+            
+            let targetMonday = getMondayOfWeek(today);
+            console.log('Current Monday:', targetMonday);
+            
+            // Si on est dimanche après 12h, passer à la semaine suivante
+            if (currentDay === 0 && currentHour >= 12) {
+                targetMonday.setDate(targetMonday.getDate() + 7);
+                console.log('Sunday afternoon, moving to next Monday');
+            }
+            // Si on est passé lundi (mardi à samedi), passer à la semaine suivante
+            else if (currentDay > 1) {
+                targetMonday.setDate(targetMonday.getDate() + 7);
+                console.log('Past Monday, moving to next Monday');
+            }
+            // Si on est lundi mais après le nettoyage (disons après 10h), passer à la semaine suivante
+            else if (currentDay === 1 && currentHour >= 10) {
+                targetMonday.setDate(targetMonday.getDate() + 7);
+                console.log('Monday after cleaning, moving to next Monday');
+            }
+            
+            // IMPORTANT : Viser le début de la journée (00h00) et non l'heure actuelle
+            targetMonday.setHours(0, 0, 0, 0);
+            console.log('Target Monday (start of day):', targetMonday);
+            
+            return targetMonday;
+        }
+
+        function isSameWeek(date1, monday) {
+            const sunday = getSundayOfWeek(monday);
+            return date1 >= monday && date1 <= sunday;
+        }
+
+        function updateCountdownDisplay(targetDate) {
+            const countdownDisplay = document.getElementById('countdownDisplay');
+            const nextGroupInfo = document.getElementById('nextGroupInfo');
+            
+            // Vérifier que les éléments existent
+            if (!countdownDisplay || !nextGroupInfo) {
+                console.log('Elements countdown non trouvés');
+                return;
+            }
+            
+            const now = new Date();
+            const timeDiff = targetDate - now;
+            
+            // Debug : afficher les dates dans la console
+            console.log('Now:', now);
+            console.log('Target:', targetDate);
+            console.log('Time diff:', timeDiff);
+            
+            if (timeDiff <= 0) {
+                countdownDisplay.innerHTML = '<div class="countdown-item"><span class="countdown-number">0</span><span class="countdown-label">Jours</span></div>';
+                nextGroupInfo.innerHTML = '<strong>Nettoyage terminé !</strong>';
+                return;
+            }
+            
+            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+            
+            const nextGroupe = getGroupeForWeek(targetDate);
+            const weekRange = getWeekRange(targetDate);
+            
+            countdownDisplay.innerHTML = `
+                <div class="countdown-item">
+                    <span class="countdown-number">${days}</span>
+                    <span class="countdown-label">Jours</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number">${hours}</span>
+                    <span class="countdown-label">Heures</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number">${minutes}</span>
+                    <span class="countdown-label">Minutes</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number">${seconds}</span>
+                    <span class="countdown-label">Secondes</span>
+                </div>
+            `;
+            
+            nextGroupInfo.innerHTML = `
+                <strong>Prochain groupe :</strong> ${nextGroupe.nom} (${weekRange.text})
+                <br><strong>Chef :</strong> ${nextGroupe.chef}
+            `;
+        }
+
+        async function requestNotificationPermission() {
+            if ('Notification' in window) {
+                const permission = await Notification.requestPermission();
+                notificationPermission = permission === 'granted';
+                
+                if (notificationPermission) {
+                    showToast('🔔 Notifications activées ! Vous recevrez des rappels.');
+                    document.getElementById('notificationBtn').textContent = '🔕 Désactiver les rappels';
+                    document.getElementById('testNotificationBtn').style.display = 'inline-block';
+                    scheduleNotifications();
+                } else {
+                    showToast('⚠️ Notifications refusées. Activez-les dans les paramètres de votre navigateur.');
+                }
+                
+                return notificationPermission;
+            } else {
+                showToast('⚠️ Votre navigateur ne supporte pas les notifications.');
+                return false;
+            }
+        }
+
+        function scheduleNotifications() {
+            if (!notificationPermission) return;
+            
+            // Notification la veille du nettoyage
+            const nextCleaning = getNextCleaningDate();
+            const dayBefore = new Date(nextCleaning);
+            dayBefore.setDate(dayBefore.getDate() - 1);
+            dayBefore.setHours(9, 0, 0, 0);
+            
+            const now = new Date();
+            const delay = dayBefore - now;
+            
+            if (delay > 0) {
+                setTimeout(() => {
+                    const groupe = getGroupeForWeek(nextCleaning);
+                    new Notification('Rappel Nettoyage Église', {
+                        body: `Demain c'est au tour du ${groupe.nom} de nettoyer l'église ! Chef : ${groupe.chef}`,
+                        icon: '🧹',
+                        tag: 'cleaning-reminder'
+                    });
+                }, delay);
+            }
+            
+            // Notification le jour même
+            const cleaningDay = new Date(nextCleaning);
+            cleaningDay.setHours(8, 0, 0, 0);
+            const cleaningDelay = cleaningDay - now;
+            
+            if (cleaningDelay > 0) {
+                setTimeout(() => {
+                    const groupe = getGroupeForWeek(nextCleaning);
+                    new Notification("C'est jour de nettoyage !", {
+                        body: `Aujourd'hui c'est au ${groupe.nom} de nettoyer l'église. Bon courage à toute l'équipe !`,
+                        icon: '🧹',
+                        tag: 'cleaning-day'
+                    });
+                }, cleaningDelay);
+            }
+        }
+
+        function testNotification() {
+            if (notificationPermission) {
+                new Notification('Test de notification', {
+                    body: 'Les notifications fonctionnent bien ! Vous recevrez des rappels pour le nettoyage.',
+                    icon: '🔔'
+                });
+                showToast('📢 Notification de test envoyée !');
+            }
+        }
+
+        async function sharePlanning() {
+            const shareData = {
+                title: 'Planning de Nettoyage - Église du Christ de Nkoabang',
+                text: 'Découvrez le planning de nettoyage de notre église !',
+                url: window.location.href
+            };
+            
+            try {
+                if (navigator.share) {
+                    await navigator.share(shareData);
+                    showToast('📤 Planning partagé avec succès !');
+                } else {
+                    // Fallback : copier le lien
+                    await copyLink();
+                }
+            } catch (err) {
+                console.log('Share canceled or failed:', err);
+            }
+        }
+
+        async function copyLink() {
+            try {
+                await navigator.clipboard.writeText(window.location.href);
+                showToast('📋 Lien copié dans le presse-papiers !');
+            } catch (err) {
+                // Fallback pour les anciens navigateurs
+                const textArea = document.createElement('textarea');
+                textArea.value = window.location.href;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('📋 Lien copié dans le presse-papiers !');
+            }
+        }
+
+        async function exportToPDF() {
+            showToast('📄 Génération du PDF en cours...');
+            
+            try {
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                
+                // Ajouter le titre
+                pdf.setFontSize(20);
+                pdf.text('Planning de Nettoyage', 105, 20, { align: 'center' });
+                pdf.setFontSize(14);
+                pdf.text('Église du Christ de Nkoabang', 105, 30, { align: 'center' });
+                
+                // Ajouter la date
+                pdf.setFontSize(12);
+                pdf.text(`Généré le ${formatDate(new Date())}`, 105, 40, { align: 'center' });
+                
+                // Ajouter le planning sur 12 semaines
+                let yPosition = 60;
+                pdf.setFontSize(14);
+                pdf.text('Planning sur 12 semaines', 20, yPosition);
+                yPosition += 15;
+                
+                pdf.setFontSize(10);
+                for (let i = 0; i < 12; i++) {
+                    const today = new Date();
+                    const monday = new Date(getMondayOfWeek(today));
+                    monday.setDate(monday.getDate() + (i * 7));
+                    const weekRange = getWeekRange(monday);
+                    const groupe = getGroupeForWeek(monday);
+                    
+                    const text = `${weekRange.text} : ${groupe.nom} (Chef: ${groupe.chef})`;
+                    pdf.text(text, 20, yPosition);
+                    yPosition += 8;
+                    
+                    if (yPosition > 270) {
+                        pdf.addPage();
+                        yPosition = 20;
+                    }
+                }
+                
+                // Ajouter les groupes
+                yPosition += 10;
+                pdf.setFontSize(14);
+                pdf.text('Groupes de nettoyage', 20, yPosition);
+                yPosition += 15;
+                
+                pdf.setFontSize(10);
+                groupes.forEach(groupe => {
+                    pdf.text(`${groupe.nom} :`, 20, yPosition);
+                    yPosition += 6;
+                    pdf.text(`  Chef: ${groupe.chef}`, 25, yPosition);
+                    yPosition += 6;
+                    pdf.text(`  Membres: ${groupe.membres.join(', ')}`, 25, yPosition);
+                    yPosition += 10;
+                    
+                    if (yPosition > 270) {
+                        pdf.addPage();
+                        yPosition = 20;
+                    }
+                });
+                
+                // Télécharger le PDF
+                pdf.save('planning-nettoyage-eglise.pdf');
+                showToast('📄 PDF généré et téléchargé !');
+                
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                showToast('❌ Erreur lors de la génération du PDF');
+            }
+        }
+
+        function printPlanning() {
+            window.print();
+            showToast('🖨️ Fenêtre d\'impression ouverte');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
         function generateCurrentWeekCard() {
             const today = new Date();
             const monday = getMondayOfWeek(today);
@@ -815,11 +1390,15 @@
 
         // Initialisation
         function initializeApp() {
-            // Générer le contenu
+            // Générer le contenu d'abord
             document.getElementById('currentWeekCard').innerHTML = generateCurrentWeekCard();
             document.getElementById('nextWeekCard').innerHTML = generateNextWeekCard();
             document.getElementById('planningGrid').innerHTML = generatePlanningGrid();
             document.getElementById('groupsGrid').innerHTML = generateGroupsGrid();
+            
+            // Ensuite démarrer le compteur à rebours (après que les éléments existent)
+            updateCountdown();
+            countdownInterval = setInterval(updateCountdown, 1000);
             
             // Configurer la recherche
             const searchInput = document.getElementById('searchInput');
@@ -855,6 +1434,37 @@
                 localStorage.setItem('theme', newTheme);
                 updateThemeIcon(newTheme);
             });
+
+            // Configurer les nouvelles fonctionnalités
+            setupInteractiveFeatures();
+        }
+
+        function setupInteractiveFeatures() {
+            // Notifications
+            const notificationBtn = document.getElementById('notificationBtn');
+            const testNotificationBtn = document.getElementById('testNotificationBtn');
+            
+            notificationBtn.addEventListener('click', async function() {
+                if (!notificationPermission) {
+                    await requestNotificationPermission();
+                } else {
+                    // Désactiver les notifications
+                    notificationPermission = false;
+                    this.textContent = '🔔 Activer les rappels';
+                    testNotificationBtn.style.display = 'none';
+                    showToast('🔕 Notifications désactivées');
+                }
+            });
+            
+            testNotificationBtn.addEventListener('click', testNotification);
+            
+            // Partage
+            document.getElementById('shareBtn').addEventListener('click', sharePlanning);
+            document.getElementById('copyLinkBtn').addEventListener('click', copyLink);
+            
+            // Export et impression
+            document.getElementById('exportPdfBtn').addEventListener('click', exportToPDF);
+            document.getElementById('printBtn').addEventListener('click', printPlanning);
         }
 
         function updateThemeIcon(theme) {
