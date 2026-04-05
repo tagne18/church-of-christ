@@ -486,8 +486,8 @@
             }
         ];
 
-        // Ordre de rotation : [Groupe1, Groupe2, Groupe3]
-        const ordreRotation = [0, 1, 2];
+        // Ordre de rotation : [Groupe3, Groupe1, Groupe2]
+        const ordreRotation = [2, 0, 1];
 
         // Fonctions utilitaires
         function normalizeString(str) {
@@ -521,7 +521,7 @@
         }
 
         function getWeekNumber(date) {
-            const referenceDate = new Date('2026-04-06'); // Lundi 6 avril 2026
+            const referenceDate = new Date('2026-03-30'); // Lundi 30 mars 2026
             const mondayDate = getMondayOfWeek(date);
             
             const diffTime = Math.abs(mondayDate - referenceDate);
