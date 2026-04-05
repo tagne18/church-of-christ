@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planning de Nettoyage - Église du Christ de Nkoabang</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #1a237e;
+            --accent-gold: #ffc107;
+            --white: #ffffff;
+            --gray-light: #f5f5f5;
+            --gray-medium: #e0e0e0;
+            --gray-dark: #757575;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8eaf6 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 2rem 0;
+            box-shadow: var(--shadow);
+        }
+
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .current-week-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            border: 3px solid var(--accent-gold);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .current-week-card::before {
+            content: "🧹";
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 100px;
+            opacity: 0.1;
+            transform: rotate(-15deg);
+        }
+
+        .current-badge {
+            display: inline-block;
+            background: var(--accent-gold);
+            color: var(--primary-blue);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .week-info {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--gray-dark);
+        }
+
+        .group-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .chef-info {
+            font-size: 1rem;
+            color: var(--gray-dark);
+        }
+
+        .next-week {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        /* Search Section */
+        .search-section {
+            padding: 3rem 0;
+            background: var(--white);
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .search-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--gray-medium);
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1);
+        }
+
+        .search-results {
+            margin-top: 2rem;
+            text-align: left;
+        }
+
+        .result-card {
+            background: var(--gray-light);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .result-card.error {
+            border-left-color: #f44336;
+            background: #ffebee;
+        }
+
+        /* Planning Section */
+        .planning-section {
+            padding: 3rem 0;
+        }
+
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            color: var(--primary-blue);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .planning-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .week-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .week-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .week-card.current {
+            border-color: var(--accent-gold);
+            background: linear-gradient(135deg, #fff9c4 0%, #ffffff 100%);
+        }
+
+        .week-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .week-dates {
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        .current-week-badge {
+            background: var(--accent-gold);
+            color: var(--primary-blue);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .group-info h3 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .chef-name {
+            color: var(--gray-dark);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .members-list {
+            font-size: 0.85rem;
+            color: var(--gray-dark);
+            line-height: 1.4;
+        }
+
+        /* Groups Section */
+        .groups-section {
+            padding: 3rem 0;
+            background: var(--white);
+        }
+
+        .groups-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .group-card {
+            background: var(--gray-light);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .group-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .group-card h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chef-section {
+            background: var(--white);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--accent-gold);
+        }
+
+        .chef-label {
+            font-size: 0.9rem;
+            color: var(--gray-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .chef-name {
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        .members-section h4 {
+            font-size: 1rem;
+            color: var(--gray-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .member-item {
+            background: var(--white);
+            padding: 0.5rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .member-item:hover {
+            background: var(--primary-blue);
+            color: var(--white);
+            transform: translateX(5px);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary-blue);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .planning-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .groups-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .week-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+
+        /* Utility classes */
+        .text-center { text-align: center; }
+        .mb-1 { margin-bottom: 1rem; }
+        .mb-2 { margin-bottom: 2rem; }
+        .mt-2 { margin-top: 2rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Planning de Nettoyage</h1>
+            <p class="subtitle">Église du Christ de Nkoabang</p>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="current-week-card" id="currentWeekCard">
+                    <!-- Content will be generated by JavaScript -->
+                </div>
+                <div class="next-week" id="nextWeekCard">
+                    <!-- Content will be generated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Search Section -->
+        <section class="search-section">
+            <div class="container">
+                <div class="search-container">
+                    <h2 class="search-title">🔍 Rechercher votre nom</h2>
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        class="search-input" 
+                        placeholder="Tapez votre nom pour trouver votre groupe..."
+                        autocomplete="off"
+                    >
+                    <div id="searchResults" class="search-results"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Planning Section -->
+        <section class="planning-section">
+            <div class="container">
+                <h2 class="section-title">📅 Planning sur 12 semaines</h2>
+                <div id="planningGrid" class="planning-grid">
+                    <!-- Content will be generated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Groups Section -->
+        <section class="groups-section">
+            <div class="container">
+                <h2 class="section-title">👥 Les Groupes de Nettoyage</h2>
+                <div id="groupsGrid" class="groups-grid">
+                    <!-- Content will be generated by JavaScript -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Église du Christ de Nkoabang - Planning de Nettoyage</p>
+        </div>
+    </footer>
+
+    <script>
+        // Données des groupes
+        const groupes = [
+            {
+                id: 1,
+                nom: "Groupe 1",
+                chef: "TAGNE LOIC FRANCK",
+                membres: [
+                    "MASSE",
+                    "CLAUDEL",
+                    "VIRGINIA",
+                    "LAETICIA",
+                    "DYLAN",
+                    "ROMUALD"
+                ]
+            },
+            {
+                id: 2,
+                nom: "Groupe 2",
+                chef: "ENGANALIM DIANE",
+                membres: [
+                    "ORNELLA",
+                    "LANDRY",
+                    "NGASSI PAULINE",
+                    "EBELLE ANGE",
+                    "KABELATH GRACE",
+                    "JUNIOR",
+                    "NDJEYIG ESTHER"
+                ]
+            },
+            {
+                id: 3,
+                nom: "Groupe 3",
+                chef: "MBALLA GRACE",
+                membres: [
+                    "MFOHAM NADEGE",
+                    "MFOHAM BERTRAND",
+                    "MOTAZE ESTER",
+                    "ENGANALIM GLORIA",
+                    "BOMBA LUC",
+                    "ATANGANA ILEYAH",
+                    "SUZANNE",
+                    "KAMDEM DYLAN"
+                ]
+            }
+        ];
+
+        // Ordre de rotation : [Groupe1, Groupe2, Groupe3]
+        const ordreRotation = [0, 1, 2];
+
+        // Fonctions utilitaires
+        function normalizeString(str) {
+            return str
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .trim();
+        }
+
+        function getMondayOfWeek(date) {
+            const d = new Date(date);
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+            return new Date(d.setDate(diff));
+        }
+
+        function getSundayOfWeek(date) {
+            const monday = getMondayOfWeek(date);
+            const sunday = new Date(monday);
+            sunday.setDate(monday.getDate() + 6);
+            return sunday;
+        }
+
+        function formatDate(date) {
+            return date.toLocaleDateString('fr-FR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        }
+
+        function getWeekNumber(date) {
+            const referenceDate = new Date('2026-04-06'); // Lundi 6 avril 2026
+            const mondayDate = getMondayOfWeek(date);
+            
+            const diffTime = Math.abs(mondayDate - referenceDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            const weekNumber = Math.floor(diffDays / 7);
+            
+            return weekNumber;
+        }
+
+        function getGroupeForWeek(date) {
+            const weekNumber = getWeekNumber(date);
+            const groupeIndex = ordreRotation[weekNumber % 3];
+            return groupes[groupeIndex];
+        }
+
+        function getWeekRange(monday) {
+            const sunday = getSundayOfWeek(monday);
+            return {
+                monday: monday,
+                sunday: sunday,
+                text: `Du ${formatDate(monday)} au ${formatDate(sunday)}`
+            };
+        }
+
+        // Fonctions de génération HTML
+        function generateCurrentWeekCard() {
+            const today = new Date();
+            const monday = getMondayOfWeek(today);
+            const weekRange = getWeekRange(monday);
+            const groupe = getGroupeForWeek(today);
+            
+            return `
+                <div class="current-badge">🧹 Cette semaine</div>
+                <div class="week-info">${weekRange.text}</div>
+                <div class="group-name">${groupe.nom}</div>
+                <div class="chef-info">👑 Chef : ${groupe.chef}</div>
+            `;
+        }
+
+        function generateNextWeekCard() {
+            const today = new Date();
+            const nextMonday = new Date(getMondayOfWeek(today));
+            nextMonday.setDate(nextMonday.getDate() + 7);
+            const weekRange = getWeekRange(nextMonday);
+            const groupe = getGroupeForWeek(nextMonday);
+            
+            return `
+                <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">📅 Semaine prochaine</h3>
+                <div class="week-info">${weekRange.text}</div>
+                <div class="group-name">${groupe.nom}</div>
+                <div class="chef-info">👑 Chef : ${groupe.chef}</div>
+            `;
+        }
+
+        function generatePlanningCard(weekOffset, isCurrent = false) {
+            const today = new Date();
+            const monday = new Date(getMondayOfWeek(today));
+            monday.setDate(monday.getDate() + (weekOffset * 7));
+            const weekRange = getWeekRange(monday);
+            const groupe = getGroupeForWeek(monday);
+            
+            return `
+                <div class="week-card ${isCurrent ? 'current' : ''}">
+                    <div class="week-header">
+                        <div class="week-dates">${weekRange.text}</div>
+                        ${isCurrent ? '<div class="current-week-badge">Cette semaine</div>' : ''}
+                    </div>
+                    <div class="group-info">
+                        <h3>${groupe.nom}</h3>
+                        <div class="chef-name">👑 ${groupe.chef}</div>
+                        <div class="members-list">
+                            ${groupe.membres.map(membre => `• ${membre}`).join('<br>')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generatePlanningGrid() {
+            let html = '';
+            const currentWeekNumber = getWeekNumber(new Date());
+            
+            for (let i = 0; i < 12; i++) {
+                html += generatePlanningCard(i, i === 0);
+            }
+            
+            return html;
+        }
+
+        function generateGroupCard(groupe) {
+            return `
+                <div class="group-card">
+                    <h3>${groupe.nom}</h3>
+                    <div class="chef-section">
+                        <div class="chef-label">👑 Chef de groupe</div>
+                        <div class="chef-name">${groupe.chef}</div>
+                    </div>
+                    <div class="members-section">
+                        <h4>👥 Membres (${groupe.membres.length})</h4>
+                        ${groupe.membres.map(membre => `
+                            <div class="member-item">${membre}</div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateGroupsGrid() {
+            return groupes.map(groupe => generateGroupCard(groupe)).join('');
+        }
+
+        function searchPerson(name) {
+            const normalizedName = normalizeString(name);
+            
+            for (const groupe of groupes) {
+                // Vérifier le chef
+                if (normalizeString(groupe.chef).includes(normalizedName)) {
+                    return {
+                        found: true,
+                        person: groupe.chef,
+                        role: 'Chef',
+                        groupe: groupe
+                    };
+                }
+                
+                // Vérifier les membres
+                for (const membre of groupe.membres) {
+                    if (normalizeString(membre).includes(normalizedName)) {
+                        return {
+                            found: true,
+                            person: membre,
+                            role: 'Membre',
+                            groupe: groupe
+                        };
+                    }
+                }
+            }
+            
+            return { found: false };
+        }
+
+        function getNextWeeksForGroup(groupe, weeksCount = 4) {
+            const weeks = [];
+            const today = new Date();
+            
+            for (let i = 0; i < weeksCount * 3; i++) {
+                const monday = new Date(getMondayOfWeek(today));
+                monday.setDate(monday.getDate() + (i * 7));
+                const weekGroupe = getGroupeForWeek(monday);
+                
+                if (weekGroupe.id === groupe.id) {
+                    weeks.push(getWeekRange(monday));
+                    if (weeks.length >= weeksCount) break;
+                }
+            }
+            
+            return weeks;
+        }
+
+        function generateSearchResult(searchData) {
+            if (!searchData.found) {
+                return `
+                    <div class="result-card error">
+                        <h3>😔 Personne non trouvée</h3>
+                        <p>Désolé, nous n'avons trouvé personne correspondant à votre recherche. 
+                        Vérifiez l'orthographe ou contactez le responsable du planning.</p>
+                    </div>
+                `;
+            }
+            
+            const nextWeeks = getNextWeeksForGroup(searchData.groupe);
+            
+            return `
+                <div class="result-card">
+                    <h3>✅ Personne trouvée !</h3>
+                    <p><strong>Nom :</strong> ${searchData.person}</p>
+                    <p><strong>Groupe :</strong> ${searchData.groupe.nom}</p>
+                    <p><strong>Rôle :</strong> ${searchData.role}</p>
+                    <p><strong>Chef de groupe :</strong> ${searchData.groupe.chef}</p>
+                    
+                    <h4 style="margin-top: 1.5rem; margin-bottom: 1rem;">📅 Vos prochaines semaines de service :</h4>
+                    ${nextWeeks.map((week, index) => `
+                        <div style="background: var(--gray-light); padding: 0.75rem; margin-bottom: 0.5rem; border-radius: 8px;">
+                            <strong>Semaine ${index + 1} :</strong> ${week.text}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // Initialisation
+        function initializeApp() {
+            // Générer le contenu
+            document.getElementById('currentWeekCard').innerHTML = generateCurrentWeekCard();
+            document.getElementById('nextWeekCard').innerHTML = generateNextWeekCard();
+            document.getElementById('planningGrid').innerHTML = generatePlanningGrid();
+            document.getElementById('groupsGrid').innerHTML = generateGroupsGrid();
+            
+            // Configurer la recherche
+            const searchInput = document.getElementById('searchInput');
+            const searchResults = document.getElementById('searchResults');
+            
+            searchInput.addEventListener('input', function() {
+                const query = this.value.trim();
+                
+                if (query.length < 2) {
+                    searchResults.innerHTML = '';
+                    return;
+                }
+                
+                const searchData = searchPerson(query);
+                searchResults.innerHTML = generateSearchResult(searchData);
+            });
+        }
+
+        // Lancer l'application quand le DOM est chargé
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html>
