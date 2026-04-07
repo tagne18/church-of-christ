@@ -1536,6 +1536,27 @@
             `;
         }
 
+        // Fonction pour détecter si c'est un mobile
+        function isMobileDevice() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            const mobileKeywords = [
+                'android', 'iphone', 'ipad', 'ipod', 'blackberry', 
+                'windows phone', 'mobile', 'opera mini', 'iemobile'
+            ];
+            
+            // Vérifier le user agent
+            const isMobileUA = mobileKeywords.some(keyword => userAgent.includes(keyword));
+            
+            // Vérifier la taille d'écran
+            const isMobileScreen = window.innerWidth <= 768;
+            
+            // Vérifier le touch
+            const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            
+            // Retourner true si au moins deux critères sont vrais
+            return (isMobileUA && isMobileScreen) || (isMobileScreen && isTouch);
+        }
+
         // Initialisation
         function initializeApp() {
             // Générer le contenu d'abord
@@ -1594,10 +1615,20 @@
                 updateBtn.addEventListener('click', forceUpdate);
             }
             
-            // Bouton d'installation PWA permanent
+            // Bouton d'installation PWA permanent - UNIQUEMENT sur mobile
             const installPwaBtn = document.getElementById('installPwaBtn');
             if (installPwaBtn) {
-                installPwaBtn.addEventListener('click', installPWA);
+                // Détecter si c'est un mobile
+                if (isMobileDevice()) {
+                    installPwaBtn.addEventListener('click', installPWA);
+                } else {
+                    // Cacher le bouton sur desktop
+                    installPwaBtn.style.display = 'none';
+                    const installSection = installPwaBtn.parentElement;
+                    if (installSection) {
+                        installSection.style.display = 'none';
+                    }
+                }
             }
             
             // Notifications
@@ -1752,6 +1783,12 @@
         });
 
         function showInstallPrompt() {
+            // Vérifier si c'est un mobile - ne pas afficher sur desktop
+            if (!isMobileDevice()) {
+                console.log('Bouton d\'installation flottant masqué sur desktop');
+                return;
+            }
+            
             // Vérifier si le bouton existe déjà
             let installBtn = document.getElementById('pwa-install-btn');
             
