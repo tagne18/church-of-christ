@@ -20,6 +20,9 @@ self.addEventListener('install', event => {
         console.error('Erreur lors du cache:', error);
       })
   );
+  
+  // Forcer l'activation immédiate du nouveau service worker
+  self.skipWaiting();
 });
 
 // Activation du service worker
@@ -34,6 +37,9 @@ self.addEventListener('activate', event => {
           }
         })
       );
+    }).then(() => {
+      // Prendre le contrôle de toutes les pages ouvertes
+      return self.clients.claim();
     })
   );
 });

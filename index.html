@@ -306,6 +306,45 @@
             margin-top: 1rem;
         }
 
+        .update-section {
+            padding: 1rem 0;
+            text-align: center;
+            background: rgba(255, 193, 7, 0.1);
+            border-radius: 15px;
+            margin-bottom: 1rem;
+        }
+
+        .update-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0.5rem;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(238, 90, 36, 0.3);
+        }
+
+        .update-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(238, 90, 36, 0.4);
+            background: linear-gradient(135deg, #ee5a24, #ff6b6b);
+        }
+
+        .update-btn:active {
+            transform: translateY(0);
+        }
+
+        .update-info {
+            font-size: 0.9rem;
+            color: var(--gray-dark);
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
         .notification-section {
             padding: 1rem 0;
             text-align: center;
@@ -778,6 +817,14 @@
         <!-- Interactive Features Section -->
         <section class="interactive-section">
             <div class="container">
+                <!-- Bouton de mise à jour -->
+                <div class="update-section">
+                    <button class="update-btn" id="updateBtn">
+                        🔄 Mettre à jour l'application
+                    </button>
+                    <p class="update-info">Si vous ne voyez pas les dernières modifications, cliquez sur ce bouton</p>
+                </div>
+                
                 <div class="notification-section">
                     <button class="notification-btn" id="notificationBtn">
                         🔔 Activer les rappels
@@ -1494,6 +1541,12 @@
         }
 
         function setupInteractiveFeatures() {
+            // Bouton de mise à jour
+            const updateBtn = document.getElementById('updateBtn');
+            if (updateBtn) {
+                updateBtn.addEventListener('click', forceUpdate);
+            }
+            
             // Notifications
             const notificationBtn = document.getElementById('notificationBtn');
             const testNotificationBtn = document.getElementById('testNotificationBtn');
@@ -1519,6 +1572,45 @@
             // Export et impression
             document.getElementById('exportPdfBtn').addEventListener('click', exportToPDF);
             document.getElementById('printBtn').addEventListener('click', printPlanning);
+        }
+
+        // Fonction pour forcer la mise à jour
+        async function forceUpdate() {
+            showToast('🔄 Mise à jour en cours...');
+            
+            try {
+                // 1. Vider le cache du navigateur
+                if ('caches' in window) {
+                    const cacheNames = await caches.keys();
+                    await Promise.all(
+                        cacheNames.map(cacheName => caches.delete(cacheName))
+                    );
+                    console.log('Cache vidé');
+                }
+                
+                // 2. Mettre à jour le service worker
+                if ('serviceWorker' in navigator) {
+                    const registration = await navigator.serviceWorker.getRegistration();
+                    if (registration) {
+                        await registration.update();
+                        console.log('Service worker mis à jour');
+                    }
+                }
+                
+                // 3. Recharger la page
+                setTimeout(() => {
+                    window.location.reload(true);
+                }, 1000);
+                
+            } catch (error) {
+                console.error('Erreur lors de la mise à jour:', error);
+                showToast('❌ Erreur lors de la mise à jour. Rechargez manuellement la page.');
+                
+                // Fallback : recharger la page
+                setTimeout(() => {
+                    window.location.reload(true);
+                }, 2000);
+            }
         }
 
         function updateThemeIcon(theme) {
