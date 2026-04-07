@@ -1,0 +1,55 @@
+{
+  "name": "Planning Nettoyage Église",
+  "short_name": "Nettoyage Église",
+  "description": "Planning de nettoyage de l'Église du Christ de Nkoabang",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#1a237e",
+  "theme_color": "#1a237e",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "fr",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiByeD0iMjQiIGZpbGw9IiMxYTIzN2UiLz4KPHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSI0OCIgeT0iNDgiPgo8cGF0aCBkPSJNNDAgNDBWNTZMNDggNDRMNTYgNTZWNDBIMDBaIiBmaWxsPSIjZmZjMTA3Ii8+CjxwYXRoIGQ9Ik0yNCAyNEg0OFY0OEgyNFYyNFoiIGZpbGw9IiNmZmMxMDciLz4KPHA+PC9wPgo8L3N2Zz4KPC9zdmc+",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiByeD0iNjQiIGZpbGw9IiMxYTIzN2UiLz4KPHN2ZyB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgdmlld0JveD0iMCAwIDI1NiAyNTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeD0iMTI4IiB5PSIxMjgiPgo8cGF0aCBkPSJNMTA2IDEwNlYxNTBMMTI4IDExMkwxNTAgMTUwVjEwNkgwWiIgZmlsbD0iI2ZmYzEwNyIvPgo8cGF0aCBkPSJNNjQgNjRIMTI4VjEyOEg2NFY2NFoiIGZpbGw9IiNmZmMxMDciLz4KPHA+PC9wPgo8L3N2Zz4KPC9zdmc+",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "utilities", "lifestyle"],
+  "shortcuts": [
+    {
+      "name": "Voir le planning",
+      "short_name": "Planning",
+      "description": "Accéder directement au planning de nettoyage",
+      "url": "/index.html#planning",
+      "icons": [
+        {
+          "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iOCIgZmlsbD0iI2ZmYzEwNyIvPgo8cGF0aCBkPSJNMTIgMTJIMzZWMzZIMTBaIiBmaWxsPSIjMWEyMzdlIi8+CjxwYXRoIGQ9Ik0xNiAxNkgzMlYyMEgxNlYxNloiIGZpbGw9IiMxYTIzN2UiLz4KPHA+PC9wPgo8L3N2Zz4=",
+          "sizes": "48x48"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjU2OCIgdmlld0JveD0iMCAwIDMyMCA1NjgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMjAiIGhlaWdodD0iNTY4IiBmaWxsPSIjZjVmNWY1Ii8+CjxyZWN0IHdpZHRoPSIzMjAiIGhlaWdodD0iODAiIGZpbGw9IiMxYTIzN2UiLz4KPHRleHQgeD0iMTYwIiB5PSI0NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjI0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+UGxhbm5pbmcgZGUgTmV0dG95YWdlPC90ZXh0Pgo8cGF0aCBkPSJNMjQwIDkwSDgwVjE0MEgyNDBaIiBmaWxsPSJ3aGl0ZSIgc3Ryb2tlPSIjZmZjMTA3IiBzdHJva2Utd2lkdGg9IjIiLz4KPHRleHQgeD0iMTYwIiB5PSIxMjAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzFhMjM3ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R3JvdXBlIDEgLSBUYWduZSBMb2ljPC90ZXh4dD4KPHA+PC9wPgo8L3N2Zz4=",
+      "sizes": "320x568",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  }
+}

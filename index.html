@@ -4,6 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Planning de Nettoyage - Église du Christ de Nkoabang</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#1a237e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Nettoyage Église">
+    <meta name="application-name" content="Planning Nettoyage">
+    <meta name="description" content="Planning de nettoyage de l'Église du Christ de Nkoabang">
+    <meta name="keywords" content="nettoyage, église, planning, nkoabang">
+    <meta name="author" content="Église du Christ de Nkoabang">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Apple Icons -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiByeD0iMjQiIGZpbGw9IiMxYTIzN2UiLz4KPHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSI0OCIgeT0iNDgiPgo8cGF0aCBkPSJNNDAgNDBWNTZMNDggNDRMNTYgNTZWNDBIMDBaIiBmaWxsPSIjZmZjMTA3Ii8+CjxwYXRoIGQ9Ik0yNCAyNEg0OFY0OEgyNFYyNFoiIGZpbGw9IiNmZmMxMDciLz4KPHA+PC9wPgo8L3N2Zz4KPC9zdmc+">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNCIgZmlsbD0iIzFhMjM3ZSIvPgo8cGF0aCBkPSJNOCA4SDI0VjI0SDhWOFoiIGZpbGw9IiNmZmMxMDciLz4KPHA+PC9wPgo8L3N2Zz4=">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -610,6 +630,39 @@
             }
         }
 
+        /* PWA Standalone Mode */
+        .pwa-standalone .theme-toggle {
+            top: 10px;
+            right: 10px;
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+        }
+
+        .pwa-standalone header {
+            padding-top: 60px; /* Espace pour la status bar */
+        }
+
+        .pwa-standalone .hero {
+            padding-top: 2rem;
+        }
+
+        .pwa-standalone .interactive-section {
+            padding-bottom: 80px; /* Espace pour navigation mobile */
+        }
+
+        /* Installation prompt animation */
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
         /* Utility classes */
         .text-center { text-align: center; }
         .mb-1 { margin-bottom: 1rem; }
@@ -684,6 +737,7 @@
             <div class="container">
                 <h1>Planning de Nettoyage</h1>
                 <p class="subtitle">Église du Christ de Nkoabang</p>
+                <p class="subtitle">Rom16:16</p>
             </div>
         </div>
     </header>
@@ -1478,6 +1532,134 @@
 
         // Lancer l'application quand le DOM est chargé
         document.addEventListener('DOMContentLoaded', initializeApp);
+
+        // PWA Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('Service Worker enregistré avec succès:', registration.scope);
+                        
+                        // Vérifier les mises à jour
+                        registration.addEventListener('updatefound', function() {
+                            const newWorker = registration.installing;
+                            newWorker.addEventListener('statechange', function() {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // Nouveau contenu disponible
+                                    if (confirm('Une nouvelle version est disponible. Voulez-vous recharger ?')) {
+                                        window.location.reload();
+                                    }
+                                }
+                            });
+                        });
+                    })
+                    .catch(function(error) {
+                        console.error('Erreur lors de l\'enregistrement du Service Worker:', error);
+                    });
+            });
+        }
+
+        // PWA Install Prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', function(e) {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Afficher un bouton d'installation personnalisé
+            setTimeout(() => {
+                if (deferredPrompt && !localStorage.getItem('pwa-dismissed')) {
+                    showInstallPrompt();
+                }
+            }, 3000);
+        });
+
+        function showInstallPrompt() {
+            const installBtn = document.createElement('button');
+            installBtn.innerHTML = '📱 Installer l\'application';
+            installBtn.style.cssText = `
+                position: fixed;
+                bottom: 80px;
+                right: 20px;
+                background: #4caf50;
+                color: white;
+                border: none;
+                padding: 12px 20px;
+                border-radius: 25px;
+                font-weight: 600;
+                cursor: pointer;
+                box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+                z-index: 1002;
+                transition: all 0.3s ease;
+                animation: slideIn 0.5s ease;
+            `;
+            
+            installBtn.addEventListener('click', async function() {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    console.log('Installation outcome:', outcome);
+                    deferredPrompt = null;
+                    installBtn.remove();
+                    localStorage.setItem('pwa-dismissed', 'true');
+                    showToast('📱 Application installée avec succès !');
+                }
+            });
+            
+            installBtn.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+                this.style.boxShadow = '0 6px 16px rgba(76, 175, 80, 0.4)';
+            });
+            
+            installBtn.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '0 4px 12px rgba(76, 175, 80, 0.3)';
+            });
+            
+            document.body.appendChild(installBtn);
+        }
+
+        // Ajouter l'animation CSS pour le bouton d'installation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Gérer les notifications PWA
+        if ('Notification' in window && 'serviceWorker' in navigator) {
+            // S'abonner aux notifications push si disponible
+            navigator.serviceWorker.ready.then(function(registration) {
+                return registration.pushManager.getSubscription()
+                    .then(function(subscription) {
+                        if (!subscription) {
+                            // Pas encore abonné
+                            console.log('Pas encore abonné aux notifications push');
+                        } else {
+                            console.log('Déjà abonné aux notifications push');
+                        }
+                    });
+            });
+        }
+
+        // Détecter si l'app est lancée en mode standalone
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            console.log('Application lancée en mode standalone');
+            document.body.classList.add('pwa-standalone');
+        }
+
+        window.addEventListener('appinstalled', function() {
+            console.log('Application installée avec succès');
+            showToast('🎉 Application installée ! Vous pouvez la trouver sur votre écran d\'accueil.');
+        });
     </script>
 </body>
 </html>
