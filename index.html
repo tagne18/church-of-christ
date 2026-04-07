@@ -306,6 +306,45 @@
             margin-top: 1rem;
         }
 
+        .install-section {
+            padding: 1rem 0;
+            text-align: center;
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 15px;
+            margin-bottom: 1rem;
+        }
+
+        .install-btn {
+            background: linear-gradient(135deg, #4caf50, #45a049);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0.5rem;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .install-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+            background: linear-gradient(135deg, #45a049, #4caf50);
+        }
+
+        .install-btn:active {
+            transform: translateY(0);
+        }
+
+        .install-info {
+            font-size: 0.9rem;
+            color: var(--gray-dark);
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
         .update-section {
             padding: 1rem 0;
             text-align: center;
@@ -823,6 +862,14 @@
                         🔄 Mettre à jour l'application
                     </button>
                     <p class="update-info">Si vous ne voyez pas les dernières modifications, cliquez sur ce bouton</p>
+                </div>
+                
+                <!-- Bouton d'installation PWA permanent -->
+                <div class="install-section">
+                    <button class="install-btn" id="installPwaBtn">
+                        📱 Installer l'application mobile
+                    </button>
+                    <p class="install-info">Installez l'application sur votre écran d'accueil pour un accès rapide</p>
                 </div>
                 
                 <div class="notification-section">
@@ -1547,6 +1594,12 @@
                 updateBtn.addEventListener('click', forceUpdate);
             }
             
+            // Bouton d'installation PWA permanent
+            const installPwaBtn = document.getElementById('installPwaBtn');
+            if (installPwaBtn) {
+                installPwaBtn.addEventListener('click', installPWA);
+            }
+            
             // Notifications
             const notificationBtn = document.getElementById('notificationBtn');
             const testNotificationBtn = document.getElementById('testNotificationBtn');
@@ -1572,6 +1625,39 @@
             // Export et impression
             document.getElementById('exportPdfBtn').addEventListener('click', exportToPDF);
             document.getElementById('printBtn').addEventListener('click', printPlanning);
+        }
+
+        // Fonction d'installation PWA permanente
+        async function installPWA() {
+            if (deferredPrompt) {
+                // Utiliser le prompt natif si disponible
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log('Installation outcome:', outcome);
+                deferredPrompt = null;
+                showToast('📱 Installation terminée ! L\'application est maintenant sur votre écran d\'accueil.');
+            } else {
+                // Fallback : instructions manuelles
+                const userAgent = navigator.userAgent.toLowerCase();
+                let instructions = '';
+                
+                if (userAgent.includes('chrome') && !userAgent.includes('edg')) {
+                    instructions = 'Chrome : Cliquez sur le menu ⋮ → "Ajouter à l\'écran d\'accueil"';
+                } else if (userAgent.includes('safari') && !userAgent.includes('chrome')) {
+                    instructions = 'Safari : Cliquez sur Partager 📤 → "Sur l\'écran d\'accueil"';
+                } else if (userAgent.includes('firefox')) {
+                    instructions = 'Firefox : Ouvrez le menu → "Installer la page"';
+                } else {
+                    instructions = 'Recherchez "Ajouter à l\'écran d\'accueil" ou "Installer la page" dans le menu de votre navigateur';
+                }
+                
+                showToast('📱 ' + instructions);
+                
+                // Afficher les instructions détaillées
+                setTimeout(() => {
+                    alert('📱 Instructions d\'installation :\n\n' + instructions + '\n\nAssurez-vous que votre navigateur est à jour et que vous utilisez HTTPS.');
+                }, 1000);
+            }
         }
 
         // Fonction pour forcer la mise à jour
@@ -1657,57 +1743,68 @@
             e.preventDefault();
             deferredPrompt = e;
             
-            // Afficher un bouton d'installation personnalisé
+            // Afficher un bouton d'installation personnalisé TOUJOURS
             setTimeout(() => {
-                if (deferredPrompt && !localStorage.getItem('pwa-dismissed')) {
+                if (deferredPrompt) {
                     showInstallPrompt();
                 }
             }, 3000);
         });
 
         function showInstallPrompt() {
-            const installBtn = document.createElement('button');
-            installBtn.innerHTML = '📱 Installer l\'application';
-            installBtn.style.cssText = `
-                position: fixed;
-                bottom: 80px;
-                right: 20px;
-                background: #4caf50;
-                color: white;
-                border: none;
-                padding: 12px 20px;
-                border-radius: 25px;
-                font-weight: 600;
-                cursor: pointer;
-                box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
-                z-index: 1002;
-                transition: all 0.3s ease;
-                animation: slideIn 0.5s ease;
-            `;
+            // Vérifier si le bouton existe déjà
+            let installBtn = document.getElementById('pwa-install-btn');
             
-            installBtn.addEventListener('click', async function() {
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    const { outcome } = await deferredPrompt.userChoice;
-                    console.log('Installation outcome:', outcome);
-                    deferredPrompt = null;
-                    installBtn.remove();
-                    localStorage.setItem('pwa-dismissed', 'true');
-                    showToast('📱 Application installée avec succès !');
-                }
-            });
-            
-            installBtn.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-2px)';
-                this.style.boxShadow = '0 6px 16px rgba(76, 175, 80, 0.4)';
-            });
-            
-            installBtn.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0)';
-                this.style.boxShadow = '0 4px 12px rgba(76, 175, 80, 0.3)';
-            });
-            
-            document.body.appendChild(installBtn);
+            if (!installBtn) {
+                installBtn = document.createElement('button');
+                installBtn.id = 'pwa-install-btn';
+                installBtn.innerHTML = '📱 Installer l\'application';
+                installBtn.style.cssText = `
+                    position: fixed;
+                    bottom: 80px;
+                    right: 20px;
+                    background: #4caf50;
+                    color: white;
+                    border: none;
+                    padding: 12px 20px;
+                    border-radius: 25px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+                    z-index: 1002;
+                    transition: all 0.3s ease;
+                    animation: slideIn 0.5s ease;
+                `;
+                
+                installBtn.addEventListener('click', async function() {
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        const { outcome } = await deferredPrompt.userChoice;
+                        console.log('Installation outcome:', outcome);
+                        deferredPrompt = null;
+                        
+                        // Ne PAS supprimer le bouton et ne PAS mettre dans localStorage
+                        showToast('📱 Installation terminée ! Le bouton reste disponible pour les futures mises à jour.');
+                        
+                        // Recréer le bouton après un délai pour permettre de réinstaller
+                        setTimeout(() => {
+                            showInstallPrompt();
+                        }, 5000);
+                    }
+                });
+                
+                installBtn.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.boxShadow = '0 6px 16px rgba(76, 175, 80, 0.4)';
+                });
+                
+                installBtn.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 4px 12px rgba(76, 175, 80, 0.3)';
+                });
+                
+                document.body.appendChild(installBtn);
+            }
         }
 
         // Ajouter l'animation CSS pour le bouton d'installation
